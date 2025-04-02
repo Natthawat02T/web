@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คุณเป็นใครในกลุ่มเพื่อน?</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;700&display=swap');
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Kanit', sans-serif;
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #fdd6bd, #ffc5f3);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.85);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #ff6b95;
+            margin-bottom: 25px;
+            font-size: 2rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .question {
+            margin: 30px 0;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .question p {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        button {
+            padding: 12px 15px;
+            margin: 0;
+            cursor: pointer;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(to right, #ff85a2, #ff7eb3);
+            color: white;
+            font-family: 'Kanit', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(255, 107, 149, 0.2);
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(255, 107, 149, 0.3);
+        }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        #result {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin: 30px 0;
+            color: #ff6b95;
+            animation: bounceIn 0.7s ease;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(255, 107, 149, 0.2);
+        }
+        
+        #shareButtons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+            animation: fadeIn 0.5s ease;
+            align-items: center;
+        }
+        
+        #shareButtons button {
+            width: 100%;
+            max-width: 250px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        #igButton {
+            background: linear-gradient(45deg, #fa7e1e, #d62976, #962fbf, #4f5bd5);
+        }
+        
+        #screenshotButton {
+            background: linear-gradient(45deg, #25d366, #128c7e);
+        }
+        
+        .progress-container {
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
+            margin: 20px 0;
+            height: 10px;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: linear-gradient(to right, #ffb8d1, #ff6b95);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+        
+        .emoji {
+            font-size: 1.5em;
+            margin-right: 5px;
+            display: inline-block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes bounceIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        #resultCard {
+            position: relative;
+            padding: 30px;
+            background: linear-gradient(135deg, #fff6e5, #fff0f7);
+            border-radius: 15px;
+            margin: 20px auto;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 350px;
+            text-align: center;
+        }
+        
+        #resultCard h2 {
+            font-size: 1.6rem;
+            margin-bottom: 10px;
+            color: #ff6b95;
+        }
+        
+        #resultCard p {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        
+        .result-emoji {
+            font-size: 3.5rem;
+            margin: 10px 0;
+        }
+        
+        .watermark {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+        
+        /* สำหรับอุปกรณ์มือถือ */
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+                border-radius: 15px;
+            }
+            
+            h1 {
+                font-size: 1.7rem;
+            }
+            
+            button {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✨ คุณเป็นใครในกลุ่มเพื่อน? ✨</h1>
+        
+        <div class="progress-container">
+            <div id="progressBar" class="progress-bar" style="width: 0%"></div>
+        </div>
+        
+        <div id="quiz">
+            <div class="question" data-question="1">
+                <p><span class="emoji">🤔</span> ถ้ามีดราม่าเกิดขึ้นในกลุ่ม คุณจะทำยังไง?</p>
+                <div class="buttons">
+                    <button onclick="selectAnswer(1, 'leader')"><span class="emoji">✋</span> เข้าห้ามทันที</button>
+                    <button onclick="selectAnswer(1, 'observer')"><span class="emoji">👀</span> แอบฟังเงียบ ๆ</button>
+                    <button onclick="selectAnswer(1, 'troublemaker')"><span class="emoji">🔥</span> เติมไฟให้ลุกโชน</button>
+                </div>
+            </div>
+            
+            <div class="question" data-question="2" style="display: none;">
+                <p><span class="emoji">🍽️</span> เวลานัดกันไปกินข้าว คุณเป็นคนแบบไหน?</p>
+                <div class="buttons">
+                    <button onclick="selectAnswer(2, 'leader')"><span class="emoji">🍕</span> เสนอร้านที่ดีที่สุด</button>
+                    <button onclick="selectAnswer(2, 'chill')"><span class="emoji">🍣</span> ตามใจคนอื่นตลอด</button>
+                    <button onclick="selectAnswer(2, 'complainer')"><span class="emoji">🍔</span> บ่นตลอด แต่ไม่เคยเลือก</button>
+                </div>
+            </div>
+            
+            <div class="question" data-question="3" style="display: none;">
+                <p><span class="emoji">🏖️</span> ไปเที่ยวกับกลุ่มเพื่อน คุณรับหน้าที่อะไร?</p>
+                <div class="buttons">
+                    <button onclick="selectAnswer(3, 'planner')"><span class="emoji">✈️</span> จัดการทุกอย่าง จองโรงแรม</button>
+                    <button onclick="selectAnswer(3, 'photographer')"><span class="emoji">📸</span> ถ่ายรูปสวย ๆ ให้ทุกคน</button>
+                    <button onclick="selectAnswer(3, 'lazy')"><span class="emoji">😴</span> ไปด้วย แต่ไม่ทำอะไร</button>
+                </div>
+            </div>
+            
+            <div class="question" data-question="4" style="display: none;">
+                <p><span class="emoji">💸</span> เมื่อถึงเวลาหารเงินค่าใช้จ่าย คุณเป็นคนยังไง?</p>
+                <div class="buttons">
+                    <button onclick="selectAnswer(4, 'banker')"><span class="emoji">💰</span> ยอมควักจ่ายก่อน</button>
+                    <button onclick="selectAnswer(4, 'broke')"><span class="emoji">🤑</span> บอกตรง ๆ ว่าตังค์หมด</button>
+                    <button onclick="selectAnswer(4, 'debt_collector')"><span class="emoji">📅</span> ช่วยเก็บเงินจากทุกคน</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="result" style="display: none;"></div>
+        
+        <div id="resultCard" style="display: none;">
+            <div class="result-emoji" id="resultEmoji">👑</div>
+            <h2>ผลทดสอบของคุณ</h2>
+            <p id="resultText">หัวหน้าแก๊งค์</p>
+            <div class="watermark">#FriendGroupQuiz</div>
+        </div>
+        
+        <div id="shareButtons" style="display: none;">
+            <button id="igButton" onclick="shareToInstagram()">
+                <span class="emoji">📲</span> แชร์ลง IG Story
+            </button>
+            <button id="screenshotButton" onclick="prepareForScreenshot()">
+                <span class="emoji">📱</span> บันทึกภาพผลลัพธ์
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const totalQuestions = 4;
+        let answers = {};
+        let currentQuestion = 1;
+        
+        function updateProgressBar() {
+            let progress = ((currentQuestion - 1) / totalQuestions) * 100;
+            document.getElementById("progressBar").style.width = progress + "%";
+        }
+        
+        function selectAnswer(question, type) {
+            answers[question] = type;
+            document.querySelector(`[data-question='${question}']`).style.display = 'none';
+            
+            currentQuestion++;
+            updateProgressBar();
+            
+            let nextQuestion = document.querySelector(`[data-question='${question + 1}']`);
+            if (nextQuestion) {
+                nextQuestion.style.display = 'block';
+            } else {
+                showResult();
+                document.getElementById("progressBar").style.width = "100%";
+            }
+        }
+        
+        function showResult() {
+            let result = analyzeResult();
+            document.getElementById("quiz").style.display = "none";
+            
+            // แสดงผลลัพธ์ในการ์ด
+            document.getElementById("resultText").innerText = result.text;
+            document.getElementById("resultEmoji").innerText = result.emoji;
+            document.getElementById("resultCard").style.display = "block";
+            
+            // แสดงข้อความผลลัพธ์แบบเดิมไว้ด้วย (สำหรับใช้ในการแชร์)
+            document.getElementById("result").innerHTML = `คุณคือ <strong>${result.text}</strong>! ${result.emoji}`;
+            document.getElementById("result").style.display = "none"; // ซ่อนไว้ แต่เก็บข้อมูลไว้
+            
+            // แสดงปุ่มแชร์
+            document.getElementById("shareButtons").style.display = "flex";
+        }
+        
+        function analyzeResult() {
+            let counts = {};
+            Object.values(answers).forEach(type => {
+                counts[type] = (counts[type] || 0) + 1;
+            });
+            
+            let sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+            let topResult = sorted[0][0];
+            
+            let descriptions = {
+                'leader': {text: 'หัวหน้าแก๊งค์', emoji: '👑'},
+                'observer': {text: 'สายสังเกตการณ์', emoji: '👀'},
+                'troublemaker': {text: 'ตัวป่วนแห่งกลุ่ม', emoji: '🔥'},
+                'chill': {text: 'สายชิล ไม่เรื่องมาก', emoji: '🌿'},
+                'planner': {text: 'นักวางแผนประจำทีม', emoji: '✈️'},
+                'photographer': {text: 'ตากล้องประจำกลุ่ม', emoji: '📸'},
+                'lazy': {text: 'ไปไหนไปกัน แต่ไม่ช่วยอะไร', emoji: '😴'},
+                'banker': {text: 'กระเป๋าตังค์ของกลุ่ม', emoji: '💰'},
+                'broke': {text: 'สายไม่มีเงินสุดในแก๊ง', emoji: '🤑'},
+                'debt_collector': {text: 'นักบัญชี ทวงเก่งสุด', emoji: '📅'}
+            };
+            
+            return descriptions[topResult] || {text: 'เพื่อนที่รักของทุกคน', emoji: '💖'};
+        }
+
+        function shareToInstagram() {
+            // สร้าง URL สำหรับแชร์ไป IG
+            let resultText = document.getElementById("result").innerText;
+            let encodedText = encodeURIComponent(resultText + " #FriendGroupQuiz");
+            
+            // สร้าง URL สำหรับแชร์ไป IG Stories
+            let igURL = `instagram://story?text=${encodedText}`;
+            
+            // ถ้าเปิดบน mobile ให้เปิด app โดยตรง
+            try {
+                window.location.href = igURL;
+                setTimeout(function() {
+                    // หากไม่สามารถเปิด app ได้ ให้ลองเปิดเว็บ
+                    window.location.href = `https://www.instagram.com/`;
+                }, 2000);
+            } catch (e) {
+                alert("กรุณาใช้งานบนมือถือเพื่อแชร์ลง Instagram หรือใช้วิธีบันทึกภาพแทน");
+            }
+        }
+        
+        function prepareForScreenshot() {
+            // แสดงเฉพาะส่วนการ์ดผลลัพธ์
+            document.querySelector(".container").style.padding = "0";
+            document.querySelector("h1").style.display = "none";
+            document.querySelector(".progress-container").style.display = "none";
+            document.getElementById("shareButtons").style.display = "none";
+            
+            document.getElementById("resultCard").style.margin = "0";
+            document.getElementById("resultCard").style.borderRadius = "0";
+            document.getElementById("resultCard").style.height = "100vh";
+            document.getElementById("resultCard").style.display = "flex";
+            document.getElementById("resultCard").style.flexDirection = "column";
+            document.getElementById("resultCard").style.justifyContent = "center";
+            document.getElementById("resultCard").style.maxWidth = "100%";
+            
+            // เพิ่มข้อความแนะนำ
+            alert("กดปุ่ม Power + Volume Down เพื่อบันทึกภาพ (Android) หรือ Power + Home/Side Button (iPhone)");
+            
+            // เพิ่มปุ่มกลับ
+            let backButton = document.createElement("button");
+            backButton.innerText = "กลับ";
+            backButton.onclick = resetLayout;
+            backButton.style.position = "fixed";
+            backButton.style.bottom = "20px";
+            backButton.style.left = "50%";
+            backButton.style.transform = "translateX(-50%)";
+            document.body.appendChild(backButton);
+        }
+        
+        function resetLayout() {
+            // คืนค่าการแสดงผลเป็นแบบเดิม
+            document.querySelector(".container").style.padding = "25px";
+            document.querySelector("h1").style.display = "block";
+            document.querySelector(".progress-container").style.display = "block";
+            document.getElementById("shareButtons").style.display = "flex";
+            
+            document.getElementById("resultCard").style.margin = "20px auto";
+            document.getElementById("resultCard").style.borderRadius = "15px";
+            document.getElementById("resultCard").style.height = "auto";
+            document.getElementById("resultCard").style.display = "block";
+            document.getElementById("resultCard").style.flexDirection = "unset";
+            document.getElementById("resultCard").style.justifyContent = "unset";
+            document.getElementById("resultCard").style.maxWidth = "350px";
+            
+            // ลบปุ่มกลับ
+            document.body.removeChild(document.body.lastChild);
+        }
+        
+        // เริ่มต้นอัพเดทแถบความคืบหน้า
+        updateProgressBar();
+    </script>
+</body>
+</html>
